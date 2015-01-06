@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@string/firstname" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/editText1"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@string/lastname" />
+
+    <EditText
+        android:id="@+id/editText4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText2"
+        android:layout_below="@+id/editText2"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:inputType="phone"
+        android:text="@string/Phone" />
+
+    <EditText
+        android:id="@+id/editText5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText4"
+        android:ems="10"
+        android:inputType="phone"
+        android:text="@string/Cell" />
+
+	<EditText
+	    android:id="@+id/editText3"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/editText5"
+	    android:layout_below="@+id/editText5"
+	    android:ems="10"
+	    android:inputType="textEmailAddress"
+	    android:text="@string/Email" >
+	</EditText>
+
+	<Button
+	    android:id="@+id/button3"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/editText3"
+	    android:layout_marginTop="24dp"
+	    android:layout_toRightOf="@+id/button4"
+	    android:text="@string/submitButton" />
+
+	<Button
+	    android:id="@+id/button4"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/button3"
+	    android:layout_alignBottom="@+id/button3"
+	    android:layout_alignLeft="@+id/editText3"
+	    android:text="@string/back" />
+
+</RelativeLayout>
