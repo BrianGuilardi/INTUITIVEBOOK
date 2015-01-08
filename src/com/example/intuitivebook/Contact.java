@@ -111,22 +111,22 @@ public class Contact extends Activity
 	public String parsePhone(String phoneN)
 	{
 		//Gets rid of dashes,(s,)s,.s(if any)
-		phoneN = phoneN.replace("-", "").replace("(", "").replace(")","").replace(".", "");
+		phoneN = phoneN.replace("-", "").replace(" ", "").replace("(", "").replace(")","").replace(".", "");
 		if(phoneN.length() == 7)
 		{
 			phoneN = phoneN.substring(0, 7);
-			return phoneN;
+			return phoneN.substring(0, 3) + "-" + phoneN.substring(3, 7);
 		}
 		else if(phoneN.length() == 10) //We have areaCode
 		{
 			phoneN = phoneN.substring(0, 10); //get phone number
-			return phoneN;
+			return phoneN.substring(0, 3) + "-" + phoneN.substring(3, 6) + "-" + phoneN.substring(6, 10);
 		}
 		else if(phoneN.length() == 11)
 		{
 			//Getting rid of 1
 			phoneN = phoneN.substring(1,phoneN.length()).substring(0, phoneN.length()); //get phone number
-			return phoneN;
+			return "1-" + phoneN.substring(0, 3) + "-" + phoneN.substring(3, 6) + "-" + phoneN.substring(6, 10);
 		}
 		return "invalidFormat";
 	}
@@ -134,21 +134,21 @@ public class Contact extends Activity
 	public String parseCell(String phoneN)
 	{
 		//Gets rid of dashes,(s,)s,.s(if any)
-		phoneN = phoneN.replace("-", "").replace("(", "").replace(")","").replace(".", "");
+		phoneN = phoneN.replace("-", "").replace(" ", "").replace("(", "").replace(")","").replace(".", "");
 		if(phoneN.length() == 7)
 		{
 			phoneN = phoneN.substring(0, 7);
-			return phoneN;
+			return phoneN.substring(0, 3) + "-" + phoneN.substring(3, 7);
 		}
 		else if(phoneN.length() == 10) //We have areaCode
 		{
 			phoneN = phoneN.substring(0, 10); //get phone number
-			return phoneN;
+			return phoneN.substring(0, 3) + "-" + phoneN.substring(3, 6) + "-" + phoneN.substring(6, 10);
 		}
 		else if(phoneN.length() == 11)
 		{
 			phoneN = phoneN.substring(1,phoneN.length()).substring(0, phoneN.length()); //get phone number
-			return phoneN;
+			return "1-" + phoneN.substring(0, 3) + "-" + phoneN.substring(3, 6) + "-" + phoneN.substring(6, 10);
 		}
 		return "invalidFormat";
 	}
@@ -156,8 +156,7 @@ public class Contact extends Activity
 	public String parseEmail(String email)
 	{
 		if(email.contains("@") && email.contains(".") && firstAtSymbolIndex == secondAtSymbolIndex) {
-			return email.substring(0, email.indexOf("@") + 1) + email.substring(email.indexOf("@") + 1, email.indexOf(".") + 1) +
-					email.substring(email.indexOf(".") + 1, email.length());
+			return email;
 		}
 		return "EmailCanUseOnly[1 @ symbol]";
 	}
