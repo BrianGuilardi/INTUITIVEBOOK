@@ -22,14 +22,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import java.util.List;
 import java.util.Vector;
-import java.io.File;
 
 public class ViewContactList extends Activity
 {
 	private ListView listview;
 	private TextView nothingToday;
 	private Vector<VContact> connections = new Vector<VContact>();
-	private File savecontacts;
+	private FileOutputStream checkContacts;
+	private FileInputStream savecontacts;
 	private Scanner readContact;
 	private ContactsAdapter vcontacts;
 	private String callThisNumber = ""; //Call default number or stays empty
@@ -45,28 +45,33 @@ public class ViewContactList extends Activity
 		addUser = (Button) findViewById(R.id.button1);
 		removeUser = (Button) findViewById(R.id.button2);
 		emergency = (Button) findViewById(R.id.button3);
-		/*
-		 * Do not just save intuitiveContacts.txt anywhere, let the user choose where they
-		 * will save their information
-		 * */
-		savecontacts = new File(getApplicationContext().getDir(STORAGE_SERVICE,MODE_APPEND),"intuitiveContacts.txt");
-		if(savecontacts.canRead())
-		{
-			try //read user information from file intuitiveContacts.txt
-			{
-				readContact = new Scanner(savecontacts).useDelimiter(">");
-				while(readContact.hasNext()) //Every parsed data is added as a VContact to connections
-				{
-					String[] contactDetails = readContact.next().split("\\|");
-					connections.add(new VContact(contactDetails[0],contactDetails[1],contactDetails[2],contactDetails[3]));
-				}
-				readContact.close();
+		
+		try {
+			checkContacts = openFileOutput("intuitiveContacts.txt", MODE_APPEND);
+			try {
+				checkContacts.close();
+			} catch (IOException e) {
+				Log.i("Error Closing File","There was a problem closing the file : " + e.getMessage());
+				e.printStackTrace();
 			}
-			catch (FileNotFoundException e) {
-				Log.i("Reading Error","Trouble understanding file: " + e.getMessage());
-				e.printStackTrace(); //Write the contents of this error to a file saved in location you know
-			};
+		} catch (FileNotFoundException e1) {
+			Log.i("Error Creating File","There was a problem creating the file : " + e1.getMessage());
+			e1.printStackTrace();
 		}
+		try { //read user information from file intuitiveContacts.txt
+			savecontacts = openFileInput("intuitiveContacts.txt");
+			readContact = new Scanner(savecontacts).useDelimiter(">");
+			while(readContact.hasNext()) //Every parsed data is added as a VContact to connections
+			{
+				String[] contactDetails = readContact.next().split("\\|");
+				connections.add(new VContact(contactDetails[0],contactDetails[1],contactDetails[2],contactDetails[3]));
+			}
+			readContact.close();
+		} catch (FileNotFoundException e1) {
+			Log.i("Reading Error","Trouble understanding file: " + e1.getMessage());
+			e1.printStackTrace();
+		}
+
 		emergency.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -134,53 +139,5 @@ public class ViewContactList extends Activity
 			});
 			return convertView;
 		}
-	}
-
-	public String parsePhone(String phoneN)
-	{
-		//Gets rid of dashes,(s,)s,.s(if any)
-		phoneN = phoneN.replace("-", "").replace("(", "").replace(")","").replace(".", "");
-		if(phoneN.length() == 7)
-		{
-			phoneN = phoneN.substring(0, 7);
-		}
-		else if(phoneN.length() == 10) //We have areaCode
-		{
-			phoneN = phoneN.substring(0, 10); //get phone number
-		}
-		else if(phoneN.length() == 11)
-		{
-			//Getting rid of 1
-			phoneN = phoneN.substring(1,phoneN.length()).substring(0, phoneN.length()); //get phone number
-		}
-		return "invalidFormat";
-	}
-
-	public String parseCell(String phoneN)
-	{
-		//Gets rid of dashes,(s,)s,.s(if any)
-		phoneN = phoneN.replace("-", "").replace("(", "").replace(")","").replace(".", "");
-		if(phoneN.length() == 7)
-		{
-			phoneN = phoneN.substring(0, 7);
-		}
-		else if(phoneN.length() == 10) //We have areaCode
-		{
-			phoneN = phoneN.substring(0, 10); //get phone number
-		}
-		else if(phoneN.length() == 11)
-		{
-			phoneN = phoneN.substring(1,phoneN.length()).substring(0, phoneN.length()); //get phone number
-		}
-		return "invalidFormat";
-	}
-
-	public String parseEmail(String email)
-	{
-		if(email.contains("@") && email.contains(".")) {
-			return email.substring(0, email.indexOf("@")).substring(email.indexOf("@") + 1, email.indexOf(".")).
-					substring(email.indexOf(".") + 1, email.length());
-		}
-		return "EmailCanUseOnly[1 @ symbol]";
 	}
 }

@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import android.widget.Toast;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.IOException;
 
 public class Contact extends Activity
@@ -23,8 +25,8 @@ public class Contact extends Activity
 	private EditText Email;
 	private Button submit;
 	private Button goback;
-	private File savecontacts;
-	private BufferedWriter writer;
+	private FileOutputStream writeContacts;
+	private OutputStreamWriter writeContactDetails;
 	private int firstAtSymbolIndex = -1;
 	private int secondAtSymbolIndex = -1;
 	@Override
@@ -46,7 +48,7 @@ public class Contact extends Activity
 		phoneNumber.setHint("Phone");
 		cellNumber.setHint("Cell");
 		Email.setHint("Email");
-		
+
 		Email.addTextChangedListener(new TextWatcher(){
 
 			@Override
@@ -63,38 +65,33 @@ public class Contact extends Activity
 				secondAtSymbolIndex = s.toString().indexOf("@", s.toString().indexOf("@"));
 			}
 		});
-		
+
 		submit.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				savecontacts = new File(getApplicationContext().getDir(STORAGE_SERVICE,MODE_APPEND),"intuitiveContacts.txt");
 
-				if(!savecontacts.exists())
-				{
-					try {
-						savecontacts = File.createTempFile("intuitiveContacts", ".txt", getApplicationContext().getFilesDir());
-					} catch (IOException e) {
-						Log.i("Error Creating File","There was a problem creating the file : " + e.getMessage());
-						e.printStackTrace();
-					}
+				try {
+					writeContacts = openFileOutput("intuitiveContacts.txt", MODE_APPEND);
+				} catch (FileNotFoundException e1) {
+					Log.i("Error Opening File","There was a problem opning the file : " + e1.getMessage());
+					e1.printStackTrace();
 				}
-				if(savecontacts.canWrite())
+				writeContactDetails = new OutputStreamWriter(writeContacts);
+				String saveContact = firstName.getText().toString() + " " +
+						lastName.getText().toString() + "|" +
+						parsePhone(phoneNumber.getText().toString()) + "|" +
+						parseCell(cellNumber.getText().toString()) + "|" +
+						parseEmail(Email.getText().toString()) + ">";
+				try
 				{
-					String saveContact = firstName.getText().toString() + " " +
-							lastName.getText().toString() + "|" +
-							parsePhone(phoneNumber.getText().toString()) + "|" +
-							parseCell(cellNumber.getText().toString()) + "|" +
-							parseEmail(Email.getText().toString()) + ">";
-					try
-					{
-						writer = new BufferedWriter(new FileWriter(savecontacts, true));
-						writer.append(saveContact); //Append current contact to end of file
-						writer.close(); //close writer after writing into file
-					} catch (IOException e) {
-						Log.i("Error Writing File","There was a problem writing the file : " + e.getMessage());
-						e.getStackTrace(); //Write file errors to a file whose location you know
-					}
+					writeContactDetails.write(saveContact); //Append current contact to end of file
+					writeContactDetails.close(); //close writer after writing into file
+					Toast.makeText(getBaseContext(), firstName.getText().toString() + " " +
+							lastName.getText().toString() + " saved successfully!",Toast.LENGTH_SHORT).show();	
+				} catch (IOException e) {
+					Log.i("Error Writing File","There was a problem writing the file : " + e.getMessage());
+					e.getStackTrace(); //Write file errors to a file whose location you know
 				}
 				Intent back = new Intent(Contact.this, ViewContactList.class); //Go back to original screen
 				startActivity(back);
@@ -118,15 +115,18 @@ public class Contact extends Activity
 		if(phoneN.length() == 7)
 		{
 			phoneN = phoneN.substring(0, 7);
+			return phoneN;
 		}
 		else if(phoneN.length() == 10) //We have areaCode
 		{
 			phoneN = phoneN.substring(0, 10); //get phone number
+			return phoneN;
 		}
 		else if(phoneN.length() == 11)
 		{
 			//Getting rid of 1
 			phoneN = phoneN.substring(1,phoneN.length()).substring(0, phoneN.length()); //get phone number
+			return phoneN;
 		}
 		return "invalidFormat";
 	}
@@ -138,14 +138,17 @@ public class Contact extends Activity
 		if(phoneN.length() == 7)
 		{
 			phoneN = phoneN.substring(0, 7);
+			return phoneN;
 		}
 		else if(phoneN.length() == 10) //We have areaCode
 		{
 			phoneN = phoneN.substring(0, 10); //get phone number
+			return phoneN;
 		}
 		else if(phoneN.length() == 11)
 		{
 			phoneN = phoneN.substring(1,phoneN.length()).substring(0, phoneN.length()); //get phone number
+			return phoneN;
 		}
 		return "invalidFormat";
 	}
@@ -153,7 +156,7 @@ public class Contact extends Activity
 	public String parseEmail(String email)
 	{
 		if(email.contains("@") && email.contains(".") && firstAtSymbolIndex == secondAtSymbolIndex) {
-			return email.substring(0, email.indexOf("@")) + email.substring(email.indexOf("@") + 1, email.indexOf(".")) +
+			return email.substring(0, email.indexOf("@") + 1) + email.substring(email.indexOf("@") + 1, email.indexOf(".") + 1) +
 					email.substring(email.indexOf(".") + 1, email.length());
 		}
 		return "EmailCanUseOnly[1 @ symbol]";
