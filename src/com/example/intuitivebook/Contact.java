@@ -3,6 +3,8 @@ package com.example.intuitivebook;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +25,8 @@ public class Contact extends Activity
 	private Button goback;
 	private File savecontacts;
 	private BufferedWriter writer;
+	private int firstAtSymbolIndex = -1;
+	private int secondAtSymbolIndex = -1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,7 +46,24 @@ public class Contact extends Activity
 		phoneNumber.setHint("Phone");
 		cellNumber.setHint("Cell");
 		Email.setHint("Email");
+		
+		Email.addTextChangedListener(new TextWatcher(){
 
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				firstAtSymbolIndex = s.toString().indexOf("@");
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+				secondAtSymbolIndex = s.toString().indexOf("@", s.toString().indexOf("@"));
+			}
+		});
+		
 		submit.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -131,9 +152,9 @@ public class Contact extends Activity
 
 	public String parseEmail(String email)
 	{
-		if(email.contains("@") && email.contains(".")) {
-			return email.substring(0, email.indexOf("@")).substring(email.indexOf("@") + 1, email.indexOf(".")).
-					substring(email.indexOf(".") + 1, email.length());
+		if(email.contains("@") && email.contains(".") && firstAtSymbolIndex == secondAtSymbolIndex) {
+			return email.substring(0, email.indexOf("@")) + email.substring(email.indexOf("@") + 1, email.indexOf(".")) +
+					email.substring(email.indexOf(".") + 1, email.length());
 		}
 		return "EmailCanUseOnly[1 @ symbol]";
 	}
