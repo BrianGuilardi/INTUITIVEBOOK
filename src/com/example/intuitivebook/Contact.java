@@ -85,6 +85,7 @@ public class Contact extends Activity
 						parseEmail(Email.getText().toString()) + ">";
 				try
 				{
+					System.out.println("Current contact: " + saveContact);
 					writeContactDetails.write(saveContact); //Append current contact to end of file
 					writeContactDetails.close(); //close writer after writing into file
 					Toast.makeText(getBaseContext(), firstName.getText().toString() + " " +
@@ -125,10 +126,10 @@ public class Contact extends Activity
 		else if(phoneN.length() == 11)
 		{
 			//Getting rid of 1
-			phoneN = phoneN.substring(1,phoneN.length()).substring(0, phoneN.length()); //get phone number
+			phoneN = phoneN.substring(1,phoneN.length()); //get phone number
 			return "1-" + phoneN.substring(0, 3) + "-" + phoneN.substring(3, 6) + "-" + phoneN.substring(6, 10);
 		}
-		return "invalidFormat";
+		return phoneN.equals("")?" ":"invalidFormat";
 	}
 
 	public String parseCell(String phoneN)
@@ -147,10 +148,10 @@ public class Contact extends Activity
 		}
 		else if(phoneN.length() == 11)
 		{
-			phoneN = phoneN.substring(1,phoneN.length()).substring(0, phoneN.length()); //get phone number
+			phoneN = phoneN.substring(1,phoneN.length()); //get phone number
 			return "1-" + phoneN.substring(0, 3) + "-" + phoneN.substring(3, 6) + "-" + phoneN.substring(6, 10);
 		}
-		return "invalidFormat";
+		return phoneN.equals("")?" ":"invalidFormat";
 	}
 
 	public String parseEmail(String email)
@@ -158,6 +159,6 @@ public class Contact extends Activity
 		if(email.contains("@") && email.contains(".") && firstAtSymbolIndex == secondAtSymbolIndex) {
 			return email;
 		}
-		return "EmailCanUseOnly[1 @ symbol]";
+		return (email.equals(""))?" ":"EmailCanUseOnly[1 @ symbol]";
 	}
 }
