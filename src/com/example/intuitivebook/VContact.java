@@ -1,11 +1,14 @@
 package com.example.intuitivebook;
 
+import java.io.Serializable;
+
 /**
  * Created by dmitridimov on 12/18/14.
  */
 
-public class VContact
+public class VContact implements Serializable
 {
+	private static final long serialVersionUID = 1L;
     private String name;
     private String phone;
     private String cell;

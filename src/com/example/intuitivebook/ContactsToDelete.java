@@ -35,24 +35,17 @@ public class ContactsToDelete extends Activity
 	private int startSelection = -1;
 	private int endSelection = -1;
 	private int checkRange = 0;
-	private Vector<VContact> contacts = new Vector<VContact>();
+	private Vector<VContact> contacts;
 	private Vector<Integer> selectedIndexesToDelete = new Vector<Integer>();
-	
-	public ContactsToDelete()
-	{
-	}
-	public ContactsToDelete(Vector<VContact> contacts)
-	{
-		contacts.addAll(contacts);
-	}
 	
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deletecontacts);
-        
+        contacts = ((Contacts)getIntent().getExtras().getSerializable("bunchOfContacts")).getContacts();
         contactstodelete = (ListView)findViewById(R.id.listView1);
         selectMultiple = (Button)findViewById(R.id.button1);
         delete = (Button)findViewById(R.id.button2);
+        contacts.addAll(contacts);
         deletecontacts = new DeleteContactsAdapter(this, contacts);
         contactstodelete.setAdapter(deletecontacts);
         

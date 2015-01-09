@@ -27,7 +27,7 @@ public class ViewContactList extends Activity
 {
 	private ListView listview;
 	private TextView nothingToday;
-	private Vector<VContact> connections = new Vector<VContact>();
+	private Contacts myContacts = new Contacts();
 	private FileOutputStream checkContacts;
 	private FileInputStream savecontacts;
 	private Scanner readContact;
@@ -64,7 +64,7 @@ public class ViewContactList extends Activity
 			while(readContact.hasNext()) //Every parsed data is added as a VContact to connections
 			{
 				String[] contactDetails = readContact.next().split("\\|");
-				connections.add(new VContact(contactDetails[0],contactDetails[1],contactDetails[2],contactDetails[3]));
+				myContacts.addContact(new VContact(contactDetails[0],contactDetails[1],contactDetails[2],contactDetails[3]));
 			}
 			readContact.close();
 		} catch (FileNotFoundException e1) {
@@ -93,13 +93,13 @@ public class ViewContactList extends Activity
 
 			@Override
 			public void onClick(View v) {
-				ContactsToDelete deletecontacts = new ContactsToDelete(connections);
-				Intent deleteContacts = new Intent(getApplicationContext(),deletecontacts.getClass());
+				Intent deleteContacts = new Intent(getApplicationContext(),ContactsToDelete.class);
+				deleteContacts.putExtra("bunchOfContacts", myContacts);
 				startActivity(deleteContacts);
 			}
 		});
 
-		vcontacts = new ContactsAdapter(this,connections); //connections should store all user
+		vcontacts = new ContactsAdapter(this,myContacts.getContacts()); //connections should store all user
 		listview.setAdapter(vcontacts);     //View contacts
 	}
 
