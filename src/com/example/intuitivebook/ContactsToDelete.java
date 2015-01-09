@@ -38,6 +38,9 @@ public class ContactsToDelete extends Activity
 	private Vector<VContact> contacts = new Vector<VContact>();
 	private Vector<Integer> selectedIndexesToDelete = new Vector<Integer>();
 	
+	public ContactsToDelete()
+	{
+	}
 	public ContactsToDelete(Vector<VContact> contacts)
 	{
 		contacts.addAll(contacts);
