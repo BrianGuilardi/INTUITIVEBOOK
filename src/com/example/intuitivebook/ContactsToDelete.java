@@ -45,7 +45,6 @@ public class ContactsToDelete extends Activity
         contactstodelete = (ListView)findViewById(R.id.listView1);
         selectMultiple = (Button)findViewById(R.id.button1);
         delete = (Button)findViewById(R.id.button2);
-        contacts.addAll(contacts);
         deletecontacts = new DeleteContactsAdapter(this, contacts);
         contactstodelete.setAdapter(deletecontacts);
         
@@ -55,10 +54,9 @@ public class ContactsToDelete extends Activity
 			public void onClick(View v) {
 				for(Integer contactIndextoDelete: selectedIndexesToDelete)
 				{
-					contacts.remove(contacts.get(contactIndextoDelete)); //Delete all selected
+					deletecontacts.remove(contacts.get(contactIndextoDelete)); //Delete all selected
+					contactstodelete.invalidateViews();
 				}
-				deletecontacts.clear();
-				deletecontacts.addAll(contacts);
 			}
 		});
         selectMultiple.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +138,7 @@ public class ContactsToDelete extends Activity
 							{
 								endSelection = position;
 								multiplesClicked = false;
-							}	
+							}
 						}
 					}
 				}
@@ -150,7 +148,7 @@ public class ContactsToDelete extends Activity
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
 					if(!isChecked){
-						selectedIndexesToDelete.remove(position); //Removed the index to delete
+						selectedIndexesToDelete.remove(Integer.valueOf(position)); //Removed the index to delete
 					}
 				}
 			});
