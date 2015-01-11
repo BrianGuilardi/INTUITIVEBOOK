@@ -74,7 +74,7 @@ public class Contact extends Activity
 				try {
 					writeContacts = openFileOutput("intuitiveContacts.txt", MODE_APPEND);
 				} catch (FileNotFoundException e1) {
-					Log.i("Error Opening File","There was a problem opning the file : " + e1.getMessage());
+					Log.i("Error Opening File","There was a problem opening the file : " + e1.getMessage());
 					e1.printStackTrace();
 				}
 				writeContactDetails = new OutputStreamWriter(writeContacts);
@@ -85,14 +85,13 @@ public class Contact extends Activity
 						parseEmail(Email.getText().toString()) + ">";
 				try
 				{
-					System.out.println("Current contact: " + saveContact);
 					writeContactDetails.write(saveContact); //Append current contact to end of file
 					writeContactDetails.close(); //close writer after writing into file
 					Toast.makeText(getBaseContext(), firstName.getText().toString() + " " +
 							lastName.getText().toString() + " saved successfully!",Toast.LENGTH_SHORT).show();	
 				} catch (IOException e) {
-					Log.i("Error Writing File","There was a problem writing the file : " + e.getMessage());
-					e.getStackTrace(); //Write file errors to a file whose location you know
+					Log.i("Error Writing File","There was a problem writing to file : " + e.getMessage());
+					e.getStackTrace();
 				}
 				Intent back = new Intent(Contact.this, ViewContactList.class); //Go back to original screen
 				startActivity(back);
