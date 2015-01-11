@@ -1,5 +1,7 @@
 package com.example.intuitivebook;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import android.app.Activity;
@@ -15,14 +17,12 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-/*
- * A list of all users currently
- * in list with check box to they left.
- * which ever checkbox(s) are selected,
- * these contacts will be removed from adapter and vector
- * This activity will have a button called select consecutive,
- * after pressing, the user can click one check box and anywhere up or down
- * from that checkbox, the entire range of contacts will be selected for deletion
+/**
+ * A list of all users currently in list with check box to they left.
+ * Which ever Checkbox(s) are selected, these contacts will be removed from adapter and vector.
+ * This activity will have a button called select(ions),
+ * After pressing select(ions), the user can click one check box and anywhere up or down
+ * From that Checkbox, the entire range of contacts will be selected for deletion
  * */
 
 public class ContactsToDelete extends Activity
@@ -31,13 +31,19 @@ public class ContactsToDelete extends Activity
 	private Button selectMultiple;
 	private DeleteContactsAdapter deletecontacts;
 	private Button delete;
-	private boolean multiplesClicked = false;
-	private int startSelection = -1;
-	private int endSelection = -1;
-	private int checkRange = 0;
 	private Vector<VContact> contacts;
-	private Vector<Integer> selectedIndexesToDelete = new Vector<Integer>();
-	
+	private TreeSet<Integer> selectedIndexesToDelete = new TreeSet<Integer>(new Comparator<Integer> (){
+		@Override
+	    public int compare(Integer n1, Integer n2) {
+	        if(n1.intValue() > n2.intValue()){
+	            return 1;
+	        } else if(n1.intValue() == n2.intValue())
+	        	return 0;
+	        else {
+	            return -1;
+	        }
+	    }
+	});
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deletecontacts);
@@ -49,45 +55,28 @@ public class ContactsToDelete extends Activity
         contactstodelete.setAdapter(deletecontacts);
         
         delete.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				for(Integer contactIndextoDelete: selectedIndexesToDelete)
+				Object[] contactIndexes = selectedIndexesToDelete.toArray();
+				for(int i = selectedIndexesToDelete.size() - 1; i > -1; i--) 
 				{
-					deletecontacts.remove(contacts.get(contactIndextoDelete)); //Delete all selected
-					contactstodelete.invalidateViews();
+					int currentIndexToDelete = ((Integer)contactIndexes[i]).intValue();
+					deletecontacts.remove(deletecontacts.getItem(currentIndexToDelete)); //Delete all selected
+					selectedIndexesToDelete.remove(currentIndexToDelete);
 				}
+				for(int i = 0; i < deletecontacts.getCount(); i++)
+				{
+					((CheckBox)contactstodelete.getChildAt(i).findViewById(R.id.checkBox1)).setChecked(false);
+				}
+				deletecontacts.multiplesClicked = true;
 			}
 		});
         selectMultiple.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				if(multiplesClicked) multiplesClicked = false;
-				else multiplesClicked = true;
-				
-				if(startSelection > -1 && endSelection > -1)
-				{
-					int range = endSelection - startSelection;
-					if(range < 0)
-					{
-						checkRange = range * (-1);
-						for(int i = endSelection + 1; i < startSelection; i++)
-						{
-							selectedIndexesToDelete.add(i);
-						}
-						contactstodelete.invalidateViews();
-					}
-					else
-					{
-						checkRange = range;
-						for(int i = startSelection + 1; i < endSelection; i++)
-						{
-							selectedIndexesToDelete.add(i);
-						}
-						contactstodelete.invalidateViews();
-					}
-				}
+				if(!deletecontacts.multiplesClicked)
+					deletecontacts.multiplesClicked = true;
 			}
 		});
     }
@@ -95,6 +84,9 @@ public class ContactsToDelete extends Activity
 	private class DeleteContactsAdapter extends ArrayAdapter<VContact>
 	{
 		private static final int layout_resource = R.layout.deletecontact;
+		public boolean multiplesClicked = false;
+		private int startSelection = -1;
+		private int endSelection = -1;
 		public DeleteContactsAdapter(Context context, List<VContact> objects) {
 			super(context, layout_resource, objects);
 		}
@@ -113,13 +105,6 @@ public class ContactsToDelete extends Activity
 			TextView email = (TextView) convertView.findViewById(R.id.textView4);
 			CheckBox deleteSelected = (CheckBox)convertView.findViewById(R.id.checkBox1);
 			
-			//The code below checks every box in consequtive range
-			if(multiplesClicked && checkRange > 0 && selectedIndexesToDelete.contains(position))
-			{
-				deleteSelected.setChecked(true);
-				checkRange--;
-			}
-			
 			name.setText(result.getName());
 			phone.setText(result.getPhone());
 			cell.setText(result.getCell());
@@ -130,14 +115,40 @@ public class ContactsToDelete extends Activity
 				public void onClick(View v) {
 					if(((CheckBox) v).isChecked())
 					{
+						System.out.println("multiplesCLicked 2 = " + multiplesClicked);
 						selectedIndexesToDelete.add(position);
 						if(multiplesClicked){
 							if(startSelection == -1)
+							{
 								startSelection = position;
+								return;
+							}
 							if(endSelection == -1)
 							{
 								endSelection = position;
-								multiplesClicked = false;
+								if(startSelection > -1 && endSelection > -1)
+								{
+									int range = endSelection - startSelection;
+									if(range < 0)
+									{
+										for(int i = endSelection + 1; i < startSelection; i++)
+										{
+											selectedIndexesToDelete.add(i);
+											CheckBox c = (CheckBox) contactstodelete.getChildAt(i).findViewById(R.id.checkBox1);
+											c.setChecked(true);
+										}
+									}
+									else
+									{
+										for(int i = startSelection + 1; i < endSelection; i++)
+										{
+											selectedIndexesToDelete.add(i);
+											CheckBox c = (CheckBox) contactstodelete.getChildAt(i).findViewById(R.id.checkBox1);
+											c.setChecked(true);
+										}
+									}
+								}
+								return;
 							}
 						}
 					}
