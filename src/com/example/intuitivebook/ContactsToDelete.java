@@ -116,7 +116,11 @@ public class ContactsToDelete extends Activity
 			{
 				deleteSelected.setChecked(false);
 			}
-
+			else if(!deleteSelected.isChecked() && selectedIndexesToDelete.contains(Integer.valueOf(position)))
+			{
+				deleteSelected.setChecked(true);
+			}
+			
 			name.setText(result.getName());
 			phone.setText(result.getPhone());
 			cell.setText(result.getCell());
