@@ -8,12 +8,16 @@ import java.util.Vector;
 class Contacts implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	private TreeMap<String, VContact> connections = new TreeMap<String,VContact>(new Comparator<String> (){
-		@Override
+	private class CompareContacts implements Comparator<String>, Serializable {
+		private static final long serialVersionUID = 1L;
+
 		public int compare(String n1, String n2) {
 			return n1.compareToIgnoreCase(n2);
 		}
-	});
+	};
+	
+	private TreeMap<String, VContact> connections = new TreeMap<String,VContact>(new CompareContacts());
+	
 	public void addContact(String name , VContact contact)
 	{
 		connections.put(name,contact);

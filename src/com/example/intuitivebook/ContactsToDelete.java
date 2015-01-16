@@ -42,6 +42,7 @@ public class ContactsToDelete extends Activity
 	private FileOutputStream writeContacts;
 	private OutputStreamWriter writeContactDetails;
 	private boolean isDone = false;
+
 	private TreeSet<Integer> selectedIndexesToDelete = new TreeSet<Integer>(new Comparator<Integer> (){
 		@Override
 		public int compare(Integer n1, Integer n2) {
@@ -64,7 +65,7 @@ public class ContactsToDelete extends Activity
 		delete = (Button)findViewById(R.id.button2);
 		deletecontacts = new DeleteContactsAdapter(this,contacts.getVectorOfContacts());
 		contactstodelete.setAdapter(deletecontacts);
-	
+		
 		selectMultiple.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -100,23 +101,33 @@ public class ContactsToDelete extends Activity
 			TextView cell = (TextView) convertView.findViewById(R.id.textView3);
 			TextView email = (TextView) convertView.findViewById(R.id.textView4);
 			CheckBox deleteSelected = (CheckBox)convertView.findViewById(R.id.checkBox1);
-		
-			if(!selectedIndexesToDelete.contains(position) && deleteSelected.isChecked())
+
+			deleteSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					if(!isChecked && selectedIndexesToDelete.contains(Integer.valueOf(position))){
+						selectedIndexesToDelete.remove(Integer.valueOf(position)); //Removed the index to delete
+					}
+				}
+			});
+
+			if(deleteSelected.isChecked() && !selectedIndexesToDelete.contains(Integer.valueOf(position)))
 			{
-				System.out.println(position + " I get called: Oooo!");
-				//deleteSelected.setChecked(false);
+				deleteSelected.setChecked(false);
 			}
-			
+
 			name.setText(result.getName());
 			phone.setText(result.getPhone());
 			cell.setText(result.getCell());
 			email.setText(result.getEmail());
+
 			deleteSelected.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if(((CheckBox) v).isChecked())
+					CheckBox c = ((CheckBox) v);
+					if(c.isChecked())
 					{
-						lastCheckedBox = (CheckBox) v;
 						selectedIndexesToDelete.add(position);
 						//System.out.println("MultiplesClicked " + multiplesClicked);
 						/*selectedIndexesToDelete.add(position);
@@ -164,21 +175,6 @@ public class ContactsToDelete extends Activity
 							startSelection = -1;
 							endSelection = -1;
 						}*/
-					}
-				}
-			});
-			deleteSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView,
-						boolean isChecked) {
-					CheckBox currentCheckBox = ((CheckBox) buttonView.findViewById(R.id.checkBox1));
-					if(currentCheckBox == lastCheckedBox && !isChecked){
-						System.out.println("I get the priviledge? " + position);
-						selectedIndexesToDelete.remove(Integer.valueOf(position)); //Removed the index to delete
-					}
-					else if(lastCheckedBox == null){ //where you currently click
-						lastCheckedBox = currentCheckBox;
-						currentCheckBox.setChecked(buttonView.isChecked() ? true : false);
 					}
 				}
 			});
