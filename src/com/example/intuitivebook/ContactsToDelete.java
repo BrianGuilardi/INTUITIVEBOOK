@@ -38,7 +38,7 @@ public class ContactsToDelete extends Activity
 	private Button selectMultiple;
 	private DeleteContactsAdapter deletecontacts;
 	private Button delete;
-	private TreeMap<String, VContact> contacts = new TreeMap<String, VContact>();
+	private Contacts contacts;
 	private FileOutputStream writeContacts;
 	private OutputStreamWriter writeContactDetails;
 	private boolean isDone = false;
@@ -57,16 +57,12 @@ public class ContactsToDelete extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.deletecontacts);
-	
-		Vector<VContact> temp = ((Contacts)getIntent().getExtras().getSerializable("bunchOfContacts")).getContacts();
-		for(VContact vc: temp)
-		{
-			contacts.put(vc.getName(), vc);
-		}
+
+		contacts = ((Contacts)getIntent().getExtras().getSerializable("bunchOfContacts"));
 		contactstodelete = (ListView)findViewById(R.id.listView1);
 		selectMultiple = (Button)findViewById(R.id.button1);
 		delete = (Button)findViewById(R.id.button2);
-		deletecontacts = new DeleteContactsAdapter(this, contacts);
+		deletecontacts = new DeleteContactsAdapter(this,contacts.getVectorOfContacts());
 		contactstodelete.setAdapter(deletecontacts);
 	
 		selectMultiple.setOnClickListener(new View.OnClickListener() {

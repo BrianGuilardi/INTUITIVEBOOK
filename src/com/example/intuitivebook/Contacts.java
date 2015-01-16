@@ -28,4 +28,12 @@ class Contacts implements Serializable
 	public TreeMap<String, VContact> getContacts(){
 		return connections;
 	}
+	public Vector<VContact> getVectorOfContacts(){
+		Vector<VContact> vcontacts = new Vector<VContact>();
+		for(String key: connections.keySet())
+		{
+			vcontacts.add(connections.get(key));
+		}
+		return vcontacts;
+	}
 }

@@ -62,14 +62,15 @@ public class ViewContactList extends Activity
 			while(readContact.hasNext()) //Every parsed data is added as a VContact to connections
 			{
 				String[] contactDetails = readContact.next().split("\\|");
-				myContacts.addContact(new VContact(contactDetails[0],contactDetails[1],contactDetails[2],contactDetails[3]));
+				VContact vc = new VContact(contactDetails[0],contactDetails[1],contactDetails[2],contactDetails[3]);
+				myContacts.addContact(vc.getName(),vc);
 			}
 			readContact.close();
 		} catch (FileNotFoundException e1) {
 			Log.i("Reading Error","Trouble understanding file: " + e1.getMessage());
 			e1.printStackTrace();
 		}
-		vcontacts = new ContactsAdapter(this,myContacts.getContacts()); //connections should store all user
+		vcontacts = new ContactsAdapter(this,myContacts.getVectorOfContacts()); //connections should store all user
 		listview.setAdapter(vcontacts);     //View contacts
 		emergency.setOnClickListener(new View.OnClickListener() {
 
