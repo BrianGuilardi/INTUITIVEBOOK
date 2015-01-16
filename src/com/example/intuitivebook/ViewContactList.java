@@ -2,7 +2,6 @@ package com.example.intuitivebook;
 
 //http://stackoverflow.com/questions/14238410/how-to-make-a-call-directly-in-android
 //used this source http://docs.oracle.com/javase/7/docs/api/java/util/Scanner.html
-//Scanner s = new Scanner(input).useDelimiter("\\s*fish\\s*");
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.util.List;
-import java.util.Vector;
 
 public class ViewContactList extends Activity
 {
@@ -71,7 +69,8 @@ public class ViewContactList extends Activity
 			Log.i("Reading Error","Trouble understanding file: " + e1.getMessage());
 			e1.printStackTrace();
 		}
-
+		vcontacts = new ContactsAdapter(this,myContacts.getContacts()); //connections should store all user
+		listview.setAdapter(vcontacts);     //View contacts
 		emergency.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -96,11 +95,11 @@ public class ViewContactList extends Activity
 				Intent deleteContacts = new Intent(getApplicationContext(),ContactsToDelete.class);
 				deleteContacts.putExtra("bunchOfContacts", myContacts);
 				startActivity(deleteContacts);
+				/*Contacts cs = (Contacts) deleteContacts.getSerializableExtra("remainingContacts");
+				vcontacts.clear();
+				vcontacts.addAll(cs.getContacts());*/
 			}
 		});
-
-		vcontacts = new ContactsAdapter(this,myContacts.getContacts()); //connections should store all user
-		listview.setAdapter(vcontacts);     //View contacts
 	}
 
 	private class ContactsAdapter extends ArrayAdapter<VContact>
