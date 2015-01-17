@@ -43,7 +43,7 @@ public class ViewContactList extends Activity
 		addUser = (Button) findViewById(R.id.button1);
 		removeUser = (Button) findViewById(R.id.button2);
 		emergency = (Button) findViewById(R.id.button3);
-		
+
 		try {
 			checkContacts = openFileOutput("intuitiveContacts.txt", MODE_APPEND);
 			try {
@@ -122,22 +122,55 @@ public class ViewContactList extends Activity
 			final TextView phone = (TextView) convertView.findViewById(R.id.textView2);
 			final TextView cell = (TextView) convertView.findViewById(R.id.textView3);
 			TextView email = (TextView) convertView.findViewById(R.id.textView4);
-			
+			callThisNumber = "";
+			phone.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					callThisNumber = phone.getText().toString();
+				}
+			});
+
+			cell.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					callThisNumber = cell.getText().toString();
+				}
+			});
+
 			name.setText(result.getName());
 			phone.setText(result.getPhone());
 			cell.setText(result.getCell());
 			email.setText(result.getEmail());
 			ImageButton callButton = (ImageButton)convertView.findViewById(R.id.imageButton1);
+			ImageButton messageButton = (ImageButton)convertView.findViewById(R.id.imageButton);
 			callButton.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					Uri number = Uri.parse("tel:" + (callThisNumber = result.getDefaultNumber()));
+					Uri number = Uri.parse("tel:" + ((callThisNumber.equals(""))?(callThisNumber = result.getDefaultNumber()):callThisNumber));
 					Intent callIntent = new Intent(Intent.ACTION_CALL, number);
 					startActivity(callIntent);
 				}
 			});
-			
+
+			messageButton.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Intent sendIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("sms:" + (callThisNumber = result.getDefaultNumber())));
+					//getExtras on other side
+					//sendIntent.putExtra("sms_body", x); 
+					startActivity(sendIntent);
+
+
+					/*Uri number = Uri.parse("tel:" + (callThisNumber = result.getDefaultNumber()));
+					Intent callIntent = new Intent(Intent.ACTION_CALL, number);
+					startActivity(callIntent);*/
+				}
+			});
+
 			return convertView;
 		}
 	}
