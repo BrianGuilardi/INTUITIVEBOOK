@@ -122,21 +122,7 @@ public class ViewContactList extends Activity
 			final TextView phone = (TextView) convertView.findViewById(R.id.textView2);
 			final TextView cell = (TextView) convertView.findViewById(R.id.textView3);
 			TextView email = (TextView) convertView.findViewById(R.id.textView4);
-			callThisNumber = "";
-			phone.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					callThisNumber = phone.getText().toString();
-				}
-			});
-			cell.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					callThisNumber = cell.getText().toString();
-				}
-			});
+			
 			name.setText(result.getName());
 			phone.setText(result.getPhone());
 			cell.setText(result.getCell());
@@ -146,12 +132,12 @@ public class ViewContactList extends Activity
 
 				@Override
 				public void onClick(View v) {
-					Uri number = Uri.parse("tel:" + ((callThisNumber.equals(""))?(callThisNumber = result.getDefaultNumber()):
-						callThisNumber));
+					Uri number = Uri.parse("tel:" + (callThisNumber = result.getDefaultNumber()));
 					Intent callIntent = new Intent(Intent.ACTION_CALL, number);
 					startActivity(callIntent);
 				}
 			});
+			
 			return convertView;
 		}
 	}
