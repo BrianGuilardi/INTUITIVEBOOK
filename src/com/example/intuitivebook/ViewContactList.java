@@ -119,10 +119,24 @@ public class ViewContactList extends Activity
 			}
 			final VContact result = getItem(position);
 			TextView name = (TextView) convertView.findViewById(R.id.textView1);
-			TextView phone = (TextView) convertView.findViewById(R.id.textView2);
-			TextView cell = (TextView) convertView.findViewById(R.id.textView3);
+			final TextView phone = (TextView) convertView.findViewById(R.id.textView2);
+			final TextView cell = (TextView) convertView.findViewById(R.id.textView3);
 			TextView email = (TextView) convertView.findViewById(R.id.textView4);
-
+			callThisNumber = "";
+			phone.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					callThisNumber = phone.getText().toString();
+				}
+			});
+			cell.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					callThisNumber = cell.getText().toString();
+				}
+			});
 			name.setText(result.getName());
 			phone.setText(result.getPhone());
 			cell.setText(result.getCell());
@@ -132,7 +146,8 @@ public class ViewContactList extends Activity
 
 				@Override
 				public void onClick(View v) {
-					Uri number = Uri.parse("tel:" + (callThisNumber = result.getDefaultNumber()));
+					Uri number = Uri.parse("tel:" + ((callThisNumber.equals(""))?(callThisNumber = result.getDefaultNumber()):
+						callThisNumber));
 					Intent callIntent = new Intent(Intent.ACTION_CALL, number);
 					startActivity(callIntent);
 				}

@@ -129,12 +129,9 @@ public class ContactsToDelete extends Activity
 			deleteSelected.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					CheckBox c = ((CheckBox) v);
-					if(c.isChecked())
+					if(((CheckBox) v).isChecked())
 					{
 						selectedIndexesToDelete.add(position);
-						//System.out.println("MultiplesClicked " + multiplesClicked);
-						/*selectedIndexesToDelete.add(position);
 						if(multiplesClicked){
 							if(startSelection == -1)
 							{
@@ -146,7 +143,7 @@ public class ContactsToDelete extends Activity
 								endSelection = position;
 								if(startSelection > -1 && endSelection > -1)
 								{
-									int range = endSelection - startSelection;
+									int range = endSelection - startSelection + 1;
 									if(range < 0)
 									{
 										for(int i = endSelection + 1; i < startSelection; i++)
@@ -158,27 +155,25 @@ public class ContactsToDelete extends Activity
 									}
 									else
 									{
-										System.out.println("Should only be called once");
 										for(int i = startSelection + 1; i < endSelection; i++)
 										{
-											System.out.println("I see this time based on range!");
 											selectedIndexesToDelete.add(i);
 											CheckBox c = (CheckBox) contactstodelete.getChildAt(i).findViewById(R.id.checkBox1);
 											c.setChecked(true);
 										}
 									}
-									startSelection = -1;
-									endSelection = -1;
-									multiplesClicked = false;
 								}
-								return;
 							}
+							startSelection = -1;
+							endSelection = -1;
+							multiplesClicked = false;
+							return;
 						}
 						else
 						{
 							startSelection = -1;
 							endSelection = -1;
-						}*/
+						}
 					}
 				}
 			});
