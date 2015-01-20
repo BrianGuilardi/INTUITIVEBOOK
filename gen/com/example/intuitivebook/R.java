@@ -55,7 +55,8 @@ public final class R {
         public static final int contactlist=0x7f030002;
         public static final int deletecontact=0x7f030003;
         public static final int deletecontacts=0x7f030004;
-        public static final int messagingclient=0x7f030005;
+        public static final int editcontact=0x7f030005;
+        public static final int messagingclient=0x7f030006;
     }
     public static final class menu {
         public static final int main=0x7f070000;
@@ -83,6 +84,7 @@ public final class R {
         public static final int deleteName=0x7f050016;
         public static final int deletePhone=0x7f050017;
         public static final int deleteSelected=0x7f050014;
+        public static final int editcontact=0x7f050022;
         public static final int emergency=0x7f050011;
         public static final int firstname=0x7f050002;
         public static final int hello_world=0x7f050001;
