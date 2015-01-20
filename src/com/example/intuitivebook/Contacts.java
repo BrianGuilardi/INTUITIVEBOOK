@@ -22,6 +22,21 @@ class Contacts implements Serializable
 	{
 		connections.put(name,contact);
 	}
+	public void addContacts(TreeMap<String, VContact> connections)
+	{
+		for(String c: connections.keySet())
+		{
+			VContact vc = connections.get(c);
+			this.connections.put(vc.getName(),vc);
+		}
+	}
+	public void removeContact(VContact removeContact)
+	{
+		connections.remove(removeContact.getName());
+	}
+	public void emptyContacts(){
+		connections.clear();
+	}
 	public void addContacts(Vector<VContact> connections)
 	{
 		for(VContact vc: connections)
@@ -32,12 +47,13 @@ class Contacts implements Serializable
 	public TreeMap<String, VContact> getContacts(){
 		return connections;
 	}
-	public Vector<VContact> getVectorOfContacts(){
-		Vector<VContact> vcontacts = new Vector<VContact>();
-		for(String key: connections.keySet())
+	public Vector<VContact> getVectorOfContacts()
+	{
+		Vector<VContact> temp = new Vector<VContact>();
+		for(String c: connections.keySet())
 		{
-			vcontacts.add(connections.get(key));
+			temp.add(connections.get(c));
 		}
-		return vcontacts;
+		return temp;
 	}
 }

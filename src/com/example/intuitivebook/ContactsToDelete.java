@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -65,7 +66,53 @@ public class ContactsToDelete extends Activity
 		delete = (Button)findViewById(R.id.button2);
 		deletecontacts = new DeleteContactsAdapter(this,contacts.getVectorOfContacts());
 		contactstodelete.setAdapter(deletecontacts);
-		
+		delete.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Object[] contactIndexes = selectedIndexesToDelete.toArray();
+				for(int i = selectedIndexesToDelete.size() - 1; i > -1; i--) 
+				{
+					int currentIndexToDelete = ((Integer)contactIndexes[i]).intValue();
+					contacts.removeContact(deletecontacts.getItem(currentIndexToDelete));
+					deletecontacts.remove(deletecontacts.getItem(currentIndexToDelete)); //Delete all selected
+					selectedIndexesToDelete.remove(currentIndexToDelete);
+				}
+
+				try {
+					writeContacts = openFileOutput("intuitiveContacts.txt", MODE_PRIVATE);
+				} catch (FileNotFoundException e1) {
+					Log.i("Error Opening File","There was a problem opening the file : " + e1.getMessage());
+					e1.printStackTrace();
+				}
+				writeContactDetails = new OutputStreamWriter(writeContacts);
+				for(String n : contacts.getContacts().keySet())
+				{
+					VContact c = contacts.getContacts().get(n);
+					String saveContact = c.getName() + "|" +
+							c.getPhone() + "|" + c.getCell() + "|" + c.getEmail() + ">";
+					try
+					{
+						writeContactDetails.write(saveContact); //Append current contact to end of file
+					} catch (IOException e) {
+						Log.i("Error Writing File","There was a problem writing to file : " + e.getMessage());
+						e.getStackTrace();
+					}
+				}
+				try {
+					writeContactDetails.close();
+				} catch (IOException e) {
+					Log.i("Error Closing File","There was a problem closing the file : " + e.getMessage());
+					e.printStackTrace();
+				} //close writer after writing into file
+				//Pass data back to previous activity
+				Intent intent = new Intent(getApplicationContext(),ViewContactList.class);
+				Contacts cs = new Contacts();
+				cs.addContacts(contacts.getContacts());
+				intent.putExtra("remainingContacts",cs);
+				setResult(RESULT_OK, intent);
+				finish();
+			}
+		});
 		selectMultiple.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -83,7 +130,6 @@ public class ContactsToDelete extends Activity
 		public boolean multiplesClicked = false;
 		private int startSelection = -1;
 		private int endSelection = -1;
-		private CheckBox lastCheckedBox;
 		public DeleteContactsAdapter(Context context, List<VContact> objects) {
 			super(context, layout_resource, objects);
 		}
@@ -120,7 +166,7 @@ public class ContactsToDelete extends Activity
 			{
 				deleteSelected.setChecked(true);
 			}
-			
+
 			name.setText(result.getName());
 			phone.setText(result.getPhone());
 			cell.setText(result.getCell());
