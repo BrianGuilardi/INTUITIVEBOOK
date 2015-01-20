@@ -1,13 +1,12 @@
 package com.example.intuitivebook;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Comparator;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,7 +22,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * A list of all users currently in list with check box to they left.

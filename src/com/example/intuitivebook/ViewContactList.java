@@ -1,8 +1,8 @@
 package com.example.intuitivebook;
 
-//http://stackoverflow.com/questions/14238410/how-to-make-a-call-directly-in-android
+//used http://stackoverflow.com/questions/14238410/how-to-make-a-call-directly-in-android
 //used this source http://docs.oracle.com/javase/7/docs/api/java/util/Scanner.html
-
+//used http://stackoverflow.com/questions/14292398/how-to-pass-data-from-2nd-activity-to-1st-activity-when-pressed-back-android
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
