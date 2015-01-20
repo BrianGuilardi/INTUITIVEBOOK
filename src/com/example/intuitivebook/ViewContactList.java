@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.util.List;
+
 /**
  * An Intuitive addressbook for adding, removing, and texting as well as calling people.
  * Its also possible(In near future) to have group chat as well as group video.

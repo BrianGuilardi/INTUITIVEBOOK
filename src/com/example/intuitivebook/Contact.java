@@ -93,8 +93,7 @@ public class Contact extends Activity
 					Log.i("Error Writing File","There was a problem writing to file : " + e.getMessage());
 					e.getStackTrace();
 				}
-				Intent back = new Intent(Contact.this, ViewContactList.class); //Go back to original screen
-				startActivity(back);
+				finish(); //Go back to original screen
 			}
 		});
 
@@ -102,8 +101,7 @@ public class Contact extends Activity
 
 			@Override
 			public void onClick(View v) {
-				Intent back = new Intent(Contact.this, ViewContactList.class);
-				startActivity(back);
+				finish();
 			}
 		});
 	}
