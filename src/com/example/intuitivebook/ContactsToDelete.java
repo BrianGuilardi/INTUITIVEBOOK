@@ -40,7 +40,6 @@ public class ContactsToDelete extends Activity
 	private Contacts contacts;
 	private FileOutputStream writeContacts;
 	private OutputStreamWriter writeContactDetails;
-	private boolean isDone = false;
 
 	private TreeSet<Integer> selectedIndexesToDelete = new TreeSet<Integer>(new Comparator<Integer> (){
 		@Override

@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/imageButton1"
         android:layout_alignRight="@+id/imageButton1"
-        android:layout_below="@+id/textView4"
+        android:layout_below="@+id/imageButton1"
         android:src="@drawable/sms" />
 
 </RelativeLayout>

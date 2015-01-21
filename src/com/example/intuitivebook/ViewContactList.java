@@ -39,6 +39,7 @@ public class ViewContactList extends Activity
 	private Button addUser = null;
 	private Button removeUser = null;
 	private Button emergency = null;
+	private Button groupMessage = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +49,7 @@ public class ViewContactList extends Activity
 		addUser = (Button) findViewById(R.id.button1);
 		removeUser = (Button) findViewById(R.id.button2);
 		emergency = (Button) findViewById(R.id.button3);
+		groupMessage =(Button)findViewById(R.id.groupButton);
 		
 		refreshContactsFromFile();
 		vcontacts = new ContactsAdapter(this,myContacts.getVectorOfContacts()); //connections should store all user
@@ -76,6 +78,13 @@ public class ViewContactList extends Activity
 				Intent deleteContacts = new Intent(getApplicationContext(),ContactsToDelete.class);
 				deleteContacts.putExtra("bunchOfContacts", myContacts);
 				startActivity(deleteContacts);
+			}
+		});
+		groupMessage.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
 			}
 		});
 	}

@@ -36,4 +36,7 @@
     <string name="smstext"/>
     <string name="smsbutton"> Send </string>
     <string name="editcontact"> Edit </string>
+    <string name="groupsms">Group Text</string>
+    <string name="smsSelected"> Send Message </string>
+    <string name="makeGroup"> Create Group</string>
 </resources>

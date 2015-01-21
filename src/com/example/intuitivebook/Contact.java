@@ -24,7 +24,6 @@ public class Contact extends Activity
 	private EditText cellNumber;
 	private EditText Email;
 	private Button submit;
-	private Button goback;
 	private FileOutputStream writeContacts;
 	private OutputStreamWriter writeContactDetails;
 	private int firstAtSymbolIndex = -1;
@@ -40,7 +39,6 @@ public class Contact extends Activity
 		cellNumber = (EditText)findViewById(R.id.editText5);
 		Email = (EditText)findViewById(R.id.editText3);
 		submit = (Button)findViewById(R.id.button3);
-		goback = (Button)findViewById(R.id.button4);
 
 		//These hint the user what each field stands for
 		firstName.setHint("First Name");
@@ -94,14 +92,6 @@ public class Contact extends Activity
 					e.getStackTrace();
 				}
 				finish(); //Go back to original screen
-			}
-		});
-
-		goback.setOnClickListener(new View.OnClickListener() { //Brings user back to previous screen
-
-			@Override
-			public void onClick(View v) {
-				finish();
 			}
 		});
 	}
